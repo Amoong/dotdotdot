@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import GridCanvas from "./GridCanvas";
-import MainCanvas from "./MainCanvas";
+import MainCanvas from "./MainCanvas/MainCanvas";
 
 interface Props {
   width: number;
