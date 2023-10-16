@@ -23,17 +23,15 @@ function MainCanvas(props: Props) {
     if (!ctxRef.current) {
       return;
     }
+
     const ctx = ctxRef.current;
 
-    const { top, left, width, height } =
-      e.currentTarget.getBoundingClientRect();
+    const { top, left, width } = e.currentTarget.getBoundingClientRect();
 
     const ratio = width / props.width;
 
     const x = Math.floor((e.clientX - left) / ratio);
     const y = Math.floor((e.clientY - top) / ratio);
-
-    console.log(x, y);
 
     ctx.fillRect(x, y, 1, 1);
   };
