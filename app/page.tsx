@@ -1,5 +1,5 @@
-import ColorMenu from "./components/ColorMenu";
-import DrawingBoard from "./components/DrawingBoard";
+import ColorMenu from "@/components/ColorMenu";
+import DrawingBoard from "@/components/DrawingBoard";
 
 export default function Home() {
   return (
