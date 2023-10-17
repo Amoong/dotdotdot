@@ -1,3 +1,4 @@
+import ColorMenu from "./components/ColorMenu";
 import DrawingBoard from "./components/DrawingBoard";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
       <div className="flex w-screen max-w-xl flex-col items-center bg-transparent">
         <h1 className="mb-5 text-2xl">DotDotDot</h1>
         <DrawingBoard width={20} height={20} />
+        <ColorMenu className="mt-3 self-start" />
       </div>
     </main>
   );
