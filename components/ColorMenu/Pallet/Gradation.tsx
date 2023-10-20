@@ -37,13 +37,14 @@ function Gradation() {
   }, []);
 
   return (
-    <div className="h-full">
+    <div className="relative h-full">
       <canvas
         className="h-full"
         width={WIDTH}
         height={HEIGHT}
         ref={ref}
       ></canvas>
+      <div className="shadow-[0_0_4px_4px_rgb(0,0,0) absolute left-0 top-0 h-3 w-3 rounded-full border-2 border-white" />
     </div>
   );
 }
