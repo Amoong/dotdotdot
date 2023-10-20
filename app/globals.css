@@ -20,6 +20,6 @@ body {
   background: rgb(var(--background-rgb));
 }
 
-canvas {
+canvas.pixelated-canvas {
   image-rendering: pixelated;
 }

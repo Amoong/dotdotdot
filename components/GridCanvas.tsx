@@ -46,7 +46,7 @@ function GridCanvas(props: Props) {
       ref={ref}
       width={props.width}
       height={props.height}
-      className="absolute left-0 top-0 -z-10 w-full border-2 border-solid border-black"
+      className="pixelated-canvas absolute left-0 top-0 -z-10 w-full border-2 border-solid border-black"
     ></canvas>
   );
 }

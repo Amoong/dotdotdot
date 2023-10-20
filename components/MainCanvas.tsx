@@ -40,7 +40,7 @@ function MainCanvas(props: Props) {
     <canvas
       role="presentation"
       ref={canvasRef}
-      className="image-ren w-full border-2 border-solid border-gray-400 bg-transparent"
+      className="image-ren pixelated-canvas w-full border-2 border-solid border-gray-400 bg-transparent"
       width={props.width}
       height={props.height}
       onMouseDown={onMouseDown}
