@@ -9,7 +9,7 @@ interface ColorState {
 export const useColorStore = create<ColorState, [["zustand/devtools", never]]>(
   devtools(
     (set) => ({
-      color: "#ffffff",
+      color: "#ff0000",
       setColor: (color: string) => set(() => ({ color })),
     }),
     { name: "color" },

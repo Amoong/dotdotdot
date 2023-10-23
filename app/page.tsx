@@ -1,5 +1,6 @@
 import ColorMenu from "@/components/ColorMenu";
 import DrawingBoard from "@/components/DrawingBoard";
+import { Metadata } from "next";
 
 export default function Home() {
   return (
@@ -12,3 +13,7 @@ export default function Home() {
     </main>
   );
 }
+
+export const metadata: Metadata = {
+  title: "DotDotDot",
+};
