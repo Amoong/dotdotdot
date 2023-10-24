@@ -5,13 +5,18 @@ import { BAR_CANVAS_HEIGHT, BAR_CANVAS_WIDTH, BAR_WIDTH } from "./constants";
 
 interface Props {
   drawPreviewColors: (ctx: CanvasRenderingContext2D) => void;
+  onSliderMove: (info: {
+    value: number;
+    ctx: CanvasRenderingContext2D;
+  }) => void;
 }
 
-function RangeBar({ drawPreviewColors }: Props) {
+function RangeBar({ drawPreviewColors, onSliderMove }: Props) {
   const pressedRef = useRef(false);
 
   const ref = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,6 +29,8 @@ function RangeBar({ drawPreviewColors }: Props) {
     if (!ctx) {
       return;
     }
+
+    ctxRef.current = ctx;
 
     drawPreviewColors(ctx);
   }, [drawPreviewColors]);
@@ -38,16 +45,37 @@ function RangeBar({ drawPreviewColors }: Props) {
     return () => window.removeEventListener("pointerup", onPointerUp);
   }, [onPointerUp]);
 
-  const onPointerMove = useCallback((e: PointerEvent) => {
-    if (!pressedRef.current || !ref.current) {
-      return;
-    }
+  const moveSlider = useCallback(
+    (y: number) => {
+      if (!sliderRef.current || !ref.current || !ctxRef.current) {
+        return;
+      }
 
-    const rect = ref.current.getBoundingClientRect();
-    const y = e.clientY - rect.top;
+      const yPos = Math.max(0, Math.min(ref.current.clientHeight, y));
 
-    moveSlider(y);
-  }, []);
+      sliderRef.current.style.transform = `translateY(${yPos}px)`;
+
+      onSliderMove({
+        value: yPos / ref.current.clientHeight,
+        ctx: ctxRef.current,
+      });
+    },
+    [onSliderMove],
+  );
+
+  const onPointerMove = useCallback(
+    (e: PointerEvent) => {
+      if (!pressedRef.current || !ref.current) {
+        return;
+      }
+
+      const rect = ref.current.getBoundingClientRect();
+      const y = e.clientY - rect.top;
+
+      moveSlider(y);
+    },
+    [moveSlider],
+  );
 
   useEffect(() => {
     window.addEventListener("pointermove", onPointerMove);
@@ -62,16 +90,6 @@ function RangeBar({ drawPreviewColors }: Props) {
     pressedRef.current = true;
 
     moveSlider(y);
-  };
-
-  const moveSlider = (y: number) => {
-    if (!sliderRef.current || !ref.current) {
-      return;
-    }
-
-    const yPos = Math.max(0, Math.min(ref.current.clientHeight, y));
-
-    sliderRef.current.style.transform = `translateY(${yPos}px)`;
   };
 
   return (

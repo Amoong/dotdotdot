@@ -1,9 +1,12 @@
 "use client";
 
+import { useColorStore } from "@/store/color";
 import RangeBar from "./RangeBar";
 import { BAR_CANVAS_HEIGHT, BAR_CANVAS_WIDTH } from "./constants";
 
 function OpacityBar() {
+  const setOpacity = useColorStore((state) => state.setOpacity);
+
   const drawPreviewColors = (ctx: CanvasRenderingContext2D) => {
     const color = "#ff0000";
 
@@ -35,7 +38,16 @@ function OpacityBar() {
     ctx.fillRect(0, 0, BAR_CANVAS_HEIGHT, BAR_CANVAS_HEIGHT);
   };
 
-  return <RangeBar drawPreviewColors={drawPreviewColors} />;
+  const onSliderMove = (info: { value: number }) => {
+    setOpacity(info.value);
+  };
+
+  return (
+    <RangeBar
+      drawPreviewColors={drawPreviewColors}
+      onSliderMove={onSliderMove}
+    />
+  );
 }
 
 export default OpacityBar;
