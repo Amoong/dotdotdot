@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import { BAR_CANVAS_HEIGHT } from "./constants";
+import { useColorStore } from "@/store/color";
 
 const WIDTH = 244;
 
 const CANVAS_WIDTH = WIDTH * 2;
 
 function Gradation() {
+  const baseColor = useColorStore((state) => state.baseColor);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -19,24 +21,29 @@ function Gradation() {
       return;
     }
 
+    ctx.clearRect(0, 0, CANVAS_WIDTH, BAR_CANVAS_HEIGHT);
+
     ctx.globalCompositeOperation = "multiply";
 
     const gradient = ctx?.createLinearGradient(0, 0, 0, BAR_CANVAS_HEIGHT);
     gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-    gradient.addColorStop(1, "rgba(70, 70, 70, 1)");
+    gradient.addColorStop(1, "rgba(0, 0, 0, 1)");
 
     ctx.fillStyle = gradient;
 
     ctx.fillRect(0, 0, CANVAS_WIDTH, BAR_CANVAS_HEIGHT);
 
     const gradient2 = ctx?.createLinearGradient(0, 0, CANVAS_WIDTH, 0);
-    gradient2.addColorStop(0, "rgba(255, 255, 255, 0)");
-    gradient2.addColorStop(1, "rgba(255, 0, 0, 1)");
+
+    const { r, g, b } = baseColor;
+
+    gradient2.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0)`);
+    gradient2.addColorStop(1, `rgba(${r}, ${g}, ${b}, 1)`);
 
     ctx.fillStyle = gradient2;
 
     ctx.fillRect(0, 0, CANVAS_WIDTH, BAR_CANVAS_HEIGHT);
-  }, []);
+  }, [baseColor]);
 
   return (
     <div className={`relative h-full w-${WIDTH}px`}>
