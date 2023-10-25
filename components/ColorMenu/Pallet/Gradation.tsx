@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useRef } from "react";
-import { BAR_CANVAS_HEIGHT } from "./constants";
+import { BAR_CANVAS_HEIGHT, CANVAS_SIZE_MULTIPLIER } from "./constants";
 import { useColorStore } from "@/store/color";
 
 const WIDTH = 244;
 
-const CANVAS_WIDTH = WIDTH * 2;
+const CANVAS_WIDTH = WIDTH * CANVAS_SIZE_MULTIPLIER;
 
 function Gradation() {
-  const baseColor = useColorStore((state) => state.baseColor);
+  const baseRgb = useColorStore((state) => state.baseRgb);
+  const setRgb = useColorStore((state) => state.setRgb);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const circleRef = useRef<HTMLDivElement>(null);
   const isPressedRef = useRef(false);
 
@@ -23,64 +25,96 @@ function Gradation() {
     if (!ctx) {
       return;
     }
+    ctxRef.current = ctx;
+
+    ctx.globalCompositeOperation = "source-over";
 
     ctx.clearRect(0, 0, CANVAS_WIDTH, BAR_CANVAS_HEIGHT);
 
-    ctx.globalCompositeOperation = "multiply";
-
     const gradient = ctx?.createLinearGradient(0, 0, 0, BAR_CANVAS_HEIGHT);
-    gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-    gradient.addColorStop(1, "rgba(0, 0, 0, 1)");
+
+    // start color of gradient is not exact rgb(255, 255, 255)
+    // so adjust a little bit of start position
+    gradient.addColorStop(0.02, "rgb(255, 255, 255)");
+    gradient.addColorStop(1, "rgb(0, 0, 0)");
 
     ctx.fillStyle = gradient;
 
     ctx.fillRect(0, 0, CANVAS_WIDTH, BAR_CANVAS_HEIGHT);
 
+    ctx.globalCompositeOperation = "multiply";
+
     const gradient2 = ctx?.createLinearGradient(0, 0, CANVAS_WIDTH, 0);
 
-    const { r, g, b } = baseColor;
+    const { r, g, b } = baseRgb;
 
+    // end color of gradient is not exact 'baseRgb'
+    // so adjust a little bit of end position
     gradient2.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0)`);
-    gradient2.addColorStop(1, `rgba(${r}, ${g}, ${b}, 1)`);
+    gradient2.addColorStop(0.98, `rgba(${r}, ${g}, ${b}, 1)`);
 
     ctx.fillStyle = gradient2;
 
     ctx.fillRect(0, 0, CANVAS_WIDTH, BAR_CANVAS_HEIGHT);
-  }, [baseColor]);
+  }, [baseRgb]);
 
   const onPointerDown = (e: React.PointerEvent) => {
     isPressedRef.current = true;
 
-    moveCircle(e.clientX, e.clientY);
+    handleWithPointer(e.clientX, e.clientY);
   };
 
-  const moveCircle = (clientX: number, clientY: number) => {
-    if (!circleRef.current || !canvasRef.current) {
-      return;
-    }
+  const fetchColor = useCallback(
+    (x: number, y: number) => {
+      if (!ctxRef.current) {
+        return;
+      }
 
-    const { left, top, width, height } =
-      canvasRef.current.getBoundingClientRect();
+      const canvasX = x * CANVAS_SIZE_MULTIPLIER;
+      const canvasY = y * CANVAS_SIZE_MULTIPLIER;
 
-    const x = Math.max(0, Math.min(width, clientX - left));
-    const y = Math.max(0, Math.min(height, clientY - top));
+      const pixel = ctxRef.current.getImageData(canvasX, canvasY, 1, 1);
 
-    const { width: circleW, height: circleH } =
-      circleRef.current.getBoundingClientRect();
+      setRgb({ r: pixel.data[0], g: pixel.data[1], b: pixel.data[2] });
+    },
+    [setRgb],
+  );
 
-    const targetX = x - circleW / 2;
-    const targetY = y - circleH / 2;
+  const handleWithPointer = useCallback(
+    (clientX: number, clientY: number) => {
+      if (!circleRef.current || !canvasRef.current) {
+        return;
+      }
 
-    circleRef.current.style.transform = `translate(${targetX}px, ${targetY}px)`;
-  };
+      const { left, top, width, height } =
+        canvasRef.current.getBoundingClientRect();
 
-  const onPointerMove = useCallback((e: PointerEvent) => {
-    if (!isPressedRef.current) {
-      return;
-    }
+      const x = Math.max(0, Math.min(width, clientX - left));
+      const y = Math.max(0, Math.min(height, clientY - top));
 
-    moveCircle(e.clientX, e.clientY);
-  }, []);
+      fetchColor(x, y);
+
+      const { width: circleW, height: circleH } =
+        circleRef.current.getBoundingClientRect();
+
+      const targetX = x - circleW / 2;
+      const targetY = y - circleH / 2;
+
+      circleRef.current.style.transform = `translate(${targetX}px, ${targetY}px)`;
+    },
+    [fetchColor],
+  );
+
+  const onPointerMove = useCallback(
+    (e: PointerEvent) => {
+      if (!isPressedRef.current) {
+        return;
+      }
+
+      handleWithPointer(e.clientX, e.clientY);
+    },
+    [handleWithPointer],
+  );
 
   useEffect(() => {
     window.addEventListener("pointermove", onPointerMove);
@@ -101,7 +135,7 @@ function Gradation() {
   return (
     <div
       onPointerDown={onPointerDown}
-      className={`relative h-full w-${WIDTH}px overflow-hidden`}
+      className={`relative h-full w-[${WIDTH}]px overflow-hidden`}
     >
       <canvas
         className="h-full w-full"

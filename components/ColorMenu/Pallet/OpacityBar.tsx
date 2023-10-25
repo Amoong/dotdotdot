@@ -5,7 +5,7 @@ import RangeBar from "./RangeBar";
 import { BAR_CANVAS_HEIGHT, BAR_CANVAS_WIDTH } from "./constants";
 
 function OpacityBar() {
-  const baseColor = useColorStore((state) => state.baseColor);
+  const baseRgb = useColorStore((state) => state.baseRgb);
   const setOpacity = useColorStore((state) => state.setOpacity);
 
   const drawPreviewColors = (ctx: CanvasRenderingContext2D) => {
@@ -30,7 +30,7 @@ function OpacityBar() {
 
     const linearGradient = ctx.createLinearGradient(0, 0, 0, BAR_CANVAS_HEIGHT);
 
-    const { r, g, b } = baseColor;
+    const { r, g, b } = baseRgb;
 
     linearGradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, 1)`);
     linearGradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);

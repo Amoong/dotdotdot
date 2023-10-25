@@ -5,7 +5,7 @@ import RangeBar from "./RangeBar";
 import { BAR_CANVAS_HEIGHT, BAR_CANVAS_WIDTH } from "./constants";
 
 function ColorBar() {
-  const setBaseColor = useColorStore((state) => state.setBaseColor);
+  const setBaseRgb = useColorStore((state) => state.setBaseRgb);
 
   const drawPreviewColors = (ctx: CanvasRenderingContext2D) => {
     // 처음부터 끝까지 그라데이션으로 채우면 위 - 아래 끝 픽셀을 추출해도
@@ -48,7 +48,7 @@ function ColorBar() {
     const pixel = info.ctx.getImageData(2, yPos, 1, 1);
     const data = pixel.data;
 
-    setBaseColor({ r: data[0], g: data[1], b: data[2] });
+    setBaseRgb({ r: data[0], g: data[1], b: data[2] });
   };
 
   return (
