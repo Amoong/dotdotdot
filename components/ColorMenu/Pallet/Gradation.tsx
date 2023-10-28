@@ -145,7 +145,7 @@ function Gradation() {
       ></canvas>
       <div
         ref={circleRef}
-        className="shadow-[0_0_4px_4px_rgb(0,0,0) absolute left-0 top-0 h-3 w-3 rounded-full border-2 border-white"
+        className="absolute left-0 top-0 h-3 w-3 rounded-full border-2 border-white shadow-[0_0_1px_1px_#aeaeae]"
       />
     </div>
   );
