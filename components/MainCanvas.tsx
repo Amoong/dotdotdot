@@ -37,6 +37,7 @@ function MainCanvas(props: Props) {
 
     ctx.fillStyle = rgba;
 
+    ctx.clearRect(x, y, 1, 1);
     ctx.fillRect(x, y, 1, 1);
   };
 
