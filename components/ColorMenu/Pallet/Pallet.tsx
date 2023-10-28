@@ -7,7 +7,7 @@ import OpacityBar from "./OpacityBar";
 
 function Pallet() {
   return (
-    <section className="w-80">
+    <section className="mt-1 w-80 overflow-hidden rounded-lg  border-gray-200 shadow-lg shadow-black">
       <ColorInfo />
       <div className="flex h-40 gap-2 p-2">
         <Gradation />

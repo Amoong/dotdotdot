@@ -3,14 +3,13 @@
 import { useEffect, useState } from "react";
 import Pallet from "./Pallet";
 import PalletToggleBtn from "./PalletToggleBtn";
-import BackgroundCanvas from "@/components/BackgroundCanvas";
 
 interface Props {
   className?: string;
 }
 
 function ColorMenu(props: Props) {
-  const [palletVisible, setPalletVisible] = useState(true);
+  const [palletVisible, setPalletVisible] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -20,7 +19,6 @@ function ColorMenu(props: Props) {
 
   return (
     <div className={`relative h-8 w-8 ${props.className}`}>
-      <BackgroundCanvas squreWidth={6} />
       <PalletToggleBtn onClick={onClickToggleBtn} />
       {palletVisible && <Pallet />}
     </div>

@@ -1,5 +1,6 @@
 import { useRgba } from "@/hooks/useRgba";
 import { useEffect, useRef } from "react";
+import BackgroundCanvas from "../BackgroundCanvas";
 
 interface Props {
   onClick: () => void;
@@ -21,7 +22,9 @@ export default function PalletToggleBtn(props: Props) {
     <button
       ref={ref}
       onClick={props.onClick}
-      className="h-full w-full rounded-sm border-2 border-solid border-gray-400 bg-teal-400"
-    ></button>
+      className="relative h-full w-full rounded-sm border-2 border-solid border-gray-400 bg-teal-400"
+    >
+      <BackgroundCanvas squreWidth={4} />
+    </button>
   );
 }
