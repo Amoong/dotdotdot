@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 
-const SQUARE_WIDTH = 6;
-
 interface Props {
-  width: number;
-  height: number;
+  squreWidth: number;
 }
 
 function BackgroundCanvas(props: Props) {
@@ -21,21 +18,24 @@ function BackgroundCanvas(props: Props) {
       return;
     }
 
-    ctx.imageSmoothingEnabled = false;
+    const { width, height } = ref.current.getBoundingClientRect();
 
-    for (let i = 0; i < props.height / SQUARE_WIDTH; i++) {
-      for (let j = 0; j < props.width / SQUARE_WIDTH; j++) {
+    ref.current.width = width;
+    ref.current.height = height;
+
+    for (let i = 0; i < height / props.squreWidth; i++) {
+      for (let j = 0; j < width / props.squreWidth; j++) {
         if ((i + j) % 2 === 0) {
           continue;
         }
 
-        const x = j * SQUARE_WIDTH;
-        const y = i * SQUARE_WIDTH;
+        const x = j * props.squreWidth;
+        const y = i * props.squreWidth;
         ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-        ctx.fillRect(x, y, SQUARE_WIDTH, SQUARE_WIDTH);
+        ctx.fillRect(x, y, props.squreWidth, props.squreWidth);
       }
     }
-  }, [props.height, props.width]);
+  }, [props.squreWidth]);
 
   useEffect(() => {
     drawBackground();
@@ -45,9 +45,7 @@ function BackgroundCanvas(props: Props) {
     <canvas
       role="presentation"
       ref={ref}
-      width={props.width}
-      height={props.height}
-      className="pixelated-canvas absolute left-0 top-0 -z-10 w-full border-2 border-solid border-black"
+      className="pixelated-canvas absolute left-0 top-0 -z-10 h-full w-full"
     ></canvas>
   );
 }

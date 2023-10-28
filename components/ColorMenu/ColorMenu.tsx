@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pallet from "./Pallet";
+import PalletToggleBtn from "./PalletToggleBtn";
+import BackgroundCanvas from "@/components/BackgroundCanvas";
 
 interface Props {
   className?: string;
@@ -10,12 +12,16 @@ interface Props {
 function ColorMenu(props: Props) {
   const [palletVisible, setPalletVisible] = useState(true);
 
+  useEffect(() => {}, []);
+
+  const onClickToggleBtn = () => {
+    setPalletVisible((prev) => !prev);
+  };
+
   return (
-    <div className={`${props.className}`}>
-      <button
-        onClick={() => setPalletVisible(true)}
-        className="h-8 w-8 rounded-sm border-2 border-solid border-gray-400 bg-teal-400"
-      ></button>
+    <div className={`relative h-8 w-8 ${props.className}`}>
+      <BackgroundCanvas squreWidth={6} />
+      <PalletToggleBtn onClick={onClickToggleBtn} />
       {palletVisible && <Pallet />}
     </div>
   );

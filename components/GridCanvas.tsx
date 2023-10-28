@@ -20,13 +20,13 @@ function GridCanvas(props: Props) {
       return;
     }
 
-    ctx.imageSmoothingEnabled = false;
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 1.5;
 
     for (let i = 0; i < props.height / props.gap; i++) {
       for (let j = 0; j < props.width / props.gap; j++) {
         const x = j * props.gap;
         const y = i * props.gap;
-        ctx.strokeStyle = "#000000";
         ctx.strokeRect(x, y, props.gap, props.gap);
       }
     }
@@ -42,7 +42,7 @@ function GridCanvas(props: Props) {
       ref={ref}
       width={props.width}
       height={props.height}
-      className="pixelated-canvas absolute left-0 top-0 -z-10 w-full border-2 border-solid border-black"
+      className="pixelated-canvas absolute left-0 top-0 -z-10 w-full"
     ></canvas>
   );
 }

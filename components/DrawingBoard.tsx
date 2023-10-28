@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import GridCanvas from "./GridCanvas";
 import MainCanvas from "./MainCanvas";
-import BackgroundCanvas from "./BackGroundCanvas";
+import BackgroundCanvas from "./BackgroundCanvas";
 
 interface Props {
   pixelWidth: number;
@@ -35,8 +35,11 @@ function DrawingBoard(props: Props) {
   }, [props.pixelWidth]);
 
   return (
-    <section ref={ref} className="relative w-full">
-      <BackgroundCanvas width={girdWidth} height={gridHeight} />
+    <section
+      ref={ref}
+      className="relative aspect-square w-full max-w-2xl border-8 border-solid border-yellow-900"
+    >
+      <BackgroundCanvas squreWidth={6} />
       <GridCanvas width={girdWidth} height={gridHeight} gap={gridGap} />
       <MainCanvas width={props.pixelWidth} height={props.pixelHeight} />
     </section>
