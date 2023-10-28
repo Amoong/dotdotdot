@@ -1,5 +1,6 @@
 "use client";
 
+import { useRgba } from "@/hooks/useRgba";
 import { useEffect, useRef } from "react";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 function MainCanvas(props: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const rgba = useRgba();
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -32,6 +34,8 @@ function MainCanvas(props: Props) {
 
     const x = Math.floor((e.clientX - left) / ratio);
     const y = Math.floor((e.clientY - top) / ratio);
+
+    ctx.fillStyle = rgba;
 
     ctx.fillRect(x, y, 1, 1);
   };

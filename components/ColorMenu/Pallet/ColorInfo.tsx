@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { PALLET_WIDTH } from "./constants";
-import { RGBA, useColorStore } from "@/store/color";
+import { useColorStore } from "@/store/color";
+import { useRgba } from "@/hooks/useRgba";
 
 const HEIGHT = 25;
 
@@ -10,9 +11,10 @@ const CANVAS_HEIGHT = HEIGHT;
 function ColorInfo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const color = useColorStore((state) => state.color);
+  const rgba = useRgba();
 
-  const getFontColor = (rgba: RGBA) => {
-    const { r, g, b, a } = rgba;
+  const getFontColor = useCallback(() => {
+    const { r, g, b, a } = color;
 
     if (a < 0.5) {
       return "#000";
@@ -23,7 +25,7 @@ function ColorInfo() {
     } else {
       return "#000";
     }
-  };
+  }, [color]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -55,13 +57,11 @@ function ColorInfo() {
       }
     }
 
-    const { r, g, b, a } = color;
-    const rgba = `rgba(${r}, ${g}, ${b}, ${a})`;
-    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+    ctx.fillStyle = rgba;
 
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    ctx.fillStyle = getFontColor(color);
+    ctx.fillStyle = getFontColor();
 
     ctx.font = "15px consolas";
     ctx.textAlign = "center";
@@ -71,7 +71,7 @@ function ColorInfo() {
     const y = CANVAS_HEIGHT / 2;
 
     ctx.fillText(rgba, x, y);
-  }, [color]);
+  }, [rgba, getFontColor]);
 
   return (
     <div className={`h-[${HEIGHT}px] w-full`}>
