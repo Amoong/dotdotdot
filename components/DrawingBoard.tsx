@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import GridCanvas from "./GridCanvas";
 import MainCanvas from "./MainCanvas";
 
+const GRID_GAP = 100;
+
 interface Props {
   width: number;
   height: number;
@@ -30,7 +32,7 @@ function DrawingBoard(props: Props) {
       return;
     }
 
-    setGridGap((ref.current.clientWidth * 2) / props.width);
+    setGridGap((ref.current.clientWidth * 2) / GRID_GAP);
   }, [props.width]);
 
   return (
