@@ -3,12 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import GridCanvas from "./GridCanvas";
 import MainCanvas from "./MainCanvas";
-
-const GRID_GAP = 100;
+import BackgroundCanvas from "./BackGroundCanvas";
 
 interface Props {
-  width: number;
-  height: number;
+  pixelWidth: number;
+  pixelHeight: number;
 }
 
 function DrawingBoard(props: Props) {
@@ -23,8 +22,8 @@ function DrawingBoard(props: Props) {
       return;
     }
 
-    setGridWidth(ref.current.clientWidth * 2);
-    setGridHeight(ref.current.clientHeight * 2);
+    setGridWidth(ref.current.clientWidth);
+    setGridHeight(ref.current.clientHeight);
   }, []);
 
   useEffect(() => {
@@ -32,13 +31,14 @@ function DrawingBoard(props: Props) {
       return;
     }
 
-    setGridGap((ref.current.clientWidth * 2) / GRID_GAP);
-  }, [props.width]);
+    setGridGap(ref.current.clientWidth / props.pixelWidth);
+  }, [props.pixelWidth]);
 
   return (
     <section ref={ref} className="relative w-full">
+      <BackgroundCanvas width={girdWidth} height={gridHeight} />
       <GridCanvas width={girdWidth} height={gridHeight} gap={gridGap} />
-      <MainCanvas width={props.width} height={props.height} />
+      <MainCanvas width={props.pixelWidth} height={props.pixelHeight} />
     </section>
   );
 }

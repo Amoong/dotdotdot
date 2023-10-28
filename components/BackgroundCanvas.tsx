@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useRef } from "react";
 
+const SQUARE_WIDTH = 6;
+
 interface Props {
   width: number;
   height: number;
-  gap: number;
 }
 
-function GridCanvas(props: Props) {
+function BackgroundCanvas(props: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
 
-  const drawGrid = useCallback(() => {
+  const drawBackground = useCallback(() => {
     if (!ref.current || !ref.current.getContext) {
       return;
     }
@@ -22,19 +23,23 @@ function GridCanvas(props: Props) {
 
     ctx.imageSmoothingEnabled = false;
 
-    for (let i = 0; i < props.height / props.gap; i++) {
-      for (let j = 0; j < props.width / props.gap; j++) {
-        const x = j * props.gap;
-        const y = i * props.gap;
-        ctx.strokeStyle = "#000000";
-        ctx.strokeRect(x, y, props.gap, props.gap);
+    for (let i = 0; i < props.height / SQUARE_WIDTH; i++) {
+      for (let j = 0; j < props.width / SQUARE_WIDTH; j++) {
+        if ((i + j) % 2 === 0) {
+          continue;
+        }
+
+        const x = j * SQUARE_WIDTH;
+        const y = i * SQUARE_WIDTH;
+        ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+        ctx.fillRect(x, y, SQUARE_WIDTH, SQUARE_WIDTH);
       }
     }
-  }, [props.height, props.width, props.gap]);
+  }, [props.height, props.width]);
 
   useEffect(() => {
-    drawGrid();
-  }, [drawGrid]);
+    drawBackground();
+  }, [drawBackground]);
 
   return (
     <canvas
@@ -47,4 +52,4 @@ function GridCanvas(props: Props) {
   );
 }
 
-export default GridCanvas;
+export default BackgroundCanvas;

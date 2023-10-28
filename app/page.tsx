@@ -7,7 +7,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between">
       <div className="flex w-screen max-w-xl flex-col items-center bg-transparent">
         <h1 className="mb-5 text-2xl">DotDotDot</h1>
-        <DrawingBoard width={20} height={20} />
+        <DrawingBoard pixelWidth={20} pixelHeight={20} />
         <ColorMenu className="mt-3 self-start" />
       </div>
     </main>
