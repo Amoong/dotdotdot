@@ -41,7 +41,8 @@ function OpacityBar() {
   };
 
   const onSliderMove = (info: { value: number }) => {
-    setOpacity(info.value);
+    const opacity = 1 - info.value;
+    setOpacity(Math.round(opacity * 100) / 100);
   };
 
   return (

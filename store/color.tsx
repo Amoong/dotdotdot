@@ -9,7 +9,7 @@ const DEFAULT_COLOR = {
 };
 
 type RGB = { r: number; g: number; b: number };
-type RGBA = { r: number; g: number; b: number; a: number };
+export type RGBA = { r: number; g: number; b: number; a: number };
 
 interface ColorState {
   baseRgb: RGB; // color from ColorBar
