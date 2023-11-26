@@ -37,7 +37,7 @@ function DrawingBoard(props: Props) {
   return (
     <section
       ref={ref}
-      className="relative aspect-square w-full max-w-2xl border-8 border-solid border-yellow-900"
+      className="relative aspect-square w-full max-w-2xl rounded-lg border-8 border-solid border-t-gray-200"
     >
       <BackgroundCanvas squreWidth={6} />
       <GridCanvas width={girdWidth} height={gridHeight} gap={gridGap} />
